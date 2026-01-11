@@ -84,6 +84,8 @@ print(f"   {len(experimental_features)} experimental features remain in original
 
 
 
+
+
 def save_standardization_parameters(scaler, desc_features, experimental_features, X_train, save_path="."):
     params_data = []
     
@@ -131,7 +133,6 @@ standardization_params = save_standardization_parameters(
     experimental_features,
     X_train
 )
-
 
 
 
@@ -207,8 +208,6 @@ models = {
 
 
 
-
-
 print("\n5. Defining model evaluation functions...")
 
 def evaluate_model_full(model, X_train, y_train, X_test, y_test, model_name):
@@ -238,8 +237,6 @@ def evaluate_model_full(model, X_train, y_train, X_test, y_test, model_name):
         'test': {'R2': test_r2, 'MAE': test_mae, 'MSE': test_mse, 'RMSE': test_rmse, 'AARD%': test_aard},
         'predictions': {'y_train_pred': y_train_pred, 'y_test_pred': y_test_pred}
     }
-
-
 
 
 
@@ -292,6 +289,7 @@ for model_name, model in models.items():
 
 
 
+
 print("\n" + "="*80)
 print("Complete Parameter Summary for All Models (Optimized Parameters + Actual Default Parameters)")
 print("="*80)
@@ -335,8 +333,6 @@ if results:
 
 else:
     print("❌ No models were successfully trained, unable to output parameters")
-
-
 
 
 
@@ -431,8 +427,6 @@ if results:
         print(f"   ✅ Prediction results saved: {predictions_filename}")
     
     print(f"\n✅ All models and prediction results have been saved successfully")    
-
-
 
 
 
@@ -623,8 +617,6 @@ if results:
 
 
 
-
-
 print("\n9. Feature Importance and SHAP Analysis...")
 
 def create_shap_summary_plot(model_name, shap_values, X_sample, feature_columns, save_path="."):
@@ -690,6 +682,17 @@ def create_shap_importance_plot(model_name, shap_values, feature_columns, save_p
             'shap_importance': shap_importance
         }).sort_values('shap_importance', ascending=True)
         
+        shap_importance_df = importance_df.sort_values('shap_importance', ascending=False)
+        shap_importance_filename = f"SHAP Feature Importance (MD-{model_name} Opt. 1).xlsx"
+        shap_importance_full_path = os.path.join(save_path, shap_importance_filename)
+        shap_importance_df.to_excel(shap_importance_full_path, index=False)
+        print(f"   💾 Path: {os.path.abspath(shap_importance_full_path)}")
+        
+        print(f"   {model_name} SHAP top 20 important features:")
+        for i, row in shap_importance_df.head(20).iterrows():
+            print(f"     {row['feature']}: {row['shap_importance']:.6f}")
+        
+
         top_20_features = importance_df.tail(20)
         
         plt.figure(figsize=(8, 10))
@@ -780,6 +783,7 @@ if results:
             print(f"   ❌ MD-{model_name} Opt. 1 SHAP analysis failed: {e}")
             import traceback
             print(f"   Detailed error: {traceback.format_exc()}")
+
 
 
 
