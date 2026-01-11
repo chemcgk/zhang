@@ -84,6 +84,8 @@ print(f"   {len(experimental_features)} experimental features remain in original
 
 
 
+
+
 def save_standardization_parameters(scaler, desc_features, experimental_features, X_train, save_path="."):
     params_data = []
     
@@ -136,7 +138,6 @@ standardization_params = save_standardization_parameters(
 
 
 
-
 print("\n3. Saving standardized data...")
 
 def save_standardized_data(X_scaled, y, feature_columns, target_column, filename):
@@ -172,15 +173,15 @@ param_distributions ={
         'learning_rate': [0.03, 0.05, 0.08],
         'max_depth': [4, 5, 6],
         'min_samples_split': [10, 15, 20],
-        'min_samples_leaf': [5, 8, 10], 
-        'subsample': [0.6, 0.7, 0.8], 
+        'min_samples_leaf': [5, 8, 10],
+        'subsample': [0.6, 0.7, 0.8],
         'max_features': ['sqrt', 'log2'],
         'alpha': [0.7, 0.8, 0.9]
     },
     'XGBoost': {
         'n_estimators': [300, 350, 400, 450],
         'learning_rate': [0.03, 0.05, 0.08],
-        'max_depth': [4, 5, 6], 
+        'max_depth': [4, 5, 6],
         'min_child_weight': [5, 7, 10],
         'subsample': [0.6, 0.7, 0.75],
         'colsample_bytree': [0.6, 0.7, 0.8],
@@ -191,7 +192,7 @@ param_distributions ={
     'LightGBM': {
         'n_estimators': [300, 350, 400, 450],
         'learning_rate': [0.03, 0.05, 0.08],
-        'num_leaves': [20, 25, 30],
+        'num_leaves': [20, 25, 30], 
         'max_depth': [6, 7, 8],
         'min_child_samples': [15, 20, 25],
         'subsample': [0.6, 0.7, 0.8],
@@ -202,14 +203,14 @@ param_distributions ={
     },
     'CatBoost': {
         'iterations': [400, 450, 500, 550],
-        'learning_rate': [0.03, 0.05, 0.08],
+        'learning_rate': [0.03, 0.05, 0.08], 
         'depth': [6, 7, 8],
         'l2_leaf_reg': [7, 10, 15],
         'random_strength': [1, 2, 3],
-        'bagging_temperature': [0, 0.5, 1], 
+        'bagging_temperature': [0, 0.5, 1],
         'leaf_estimation_iterations': [10, 15, 20],
         'border_count': [32, 64, 128]
-}
+    }
 }
 
 
@@ -219,8 +220,6 @@ models = {
     'LightGBM': LGBMRegressor(random_state=512, verbose=-1),
     'CatBoost': CatBoostRegressor(random_state=512, verbose=False, allow_writing_files=False)
 }
-
-
 
 
 
@@ -255,8 +254,6 @@ def evaluate_model_full(model, X_train, y_train, X_test, y_test, model_name):
         'test': {'R2': test_r2, 'MAE': test_mae, 'MSE': test_mse, 'RMSE': test_rmse, 'AARD%': test_aard},
         'predictions': {'y_train_pred': y_train_pred, 'y_test_pred': y_test_pred}
     }
-
-
 
 
 
@@ -309,6 +306,7 @@ for model_name, model in models.items():
 
 
 
+
 print("\n" + "="*80)
 print("Complete Parameter Summary for All Models (Optimized Parameters + Actual Default Parameters)")
 print("="*80)
@@ -352,8 +350,6 @@ if results:
 
 else:
     print("❌ No models were successfully trained, unable to output parameters")
-
-
 
 
 
@@ -448,8 +444,6 @@ if results:
         print(f"   ✅ Prediction results saved: {predictions_filename}")
     
     print(f"\n✅ All models and prediction results have been saved successfully")    
-
-
 
 
 
@@ -640,8 +634,6 @@ if results:
 
 
 
-
-
 print("\n9. Feature Importance and SHAP Analysis...")
 
 def create_shap_summary_plot(model_name, shap_values, X_sample, feature_columns, save_path="."):
@@ -707,6 +699,17 @@ def create_shap_importance_plot(model_name, shap_values, feature_columns, save_p
             'shap_importance': shap_importance
         }).sort_values('shap_importance', ascending=True)
         
+        shap_importance_df = importance_df.sort_values('shap_importance', ascending=False)
+        shap_importance_filename = f"SHAP Feature Importance (MD-{model_name} Opt. 3).xlsx"
+        shap_importance_full_path = os.path.join(save_path, shap_importance_filename)
+        shap_importance_df.to_excel(shap_importance_full_path, index=False)
+        print(f"   💾 Path: {os.path.abspath(shap_importance_full_path)}")
+        
+        print(f"   {model_name} SHAP top 20 important features:")
+        for i, row in shap_importance_df.head(20).iterrows():
+            print(f"     {row['feature']}: {row['shap_importance']:.6f}")
+        
+
         top_20_features = importance_df.tail(20)
         
         plt.figure(figsize=(8, 10))
@@ -797,6 +800,7 @@ if results:
             print(f"   ❌ MD-{model_name} Opt. 3 SHAP analysis failed: {e}")
             import traceback
             print(f"   Detailed error: {traceback.format_exc()}")
+
 
 
 
