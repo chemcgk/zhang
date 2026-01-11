@@ -84,6 +84,8 @@ print(f"   {len(experimental_features)} experimental features remain in original
 
 
 
+
+
 def save_standardization_parameters(scaler, desc_features, experimental_features, X_train, save_path="."):
     params_data = []
     
@@ -131,7 +133,6 @@ standardization_params = save_standardization_parameters(
     experimental_features,
     X_train
 )
-
 
 
 
@@ -207,8 +208,6 @@ models = {
 
 
 
-
-
 print("\n5. Defining model evaluation functions...")
 
 def evaluate_model_full(model, X_train, y_train, X_test, y_test, model_name):
@@ -238,8 +237,6 @@ def evaluate_model_full(model, X_train, y_train, X_test, y_test, model_name):
         'test': {'R2': test_r2, 'MAE': test_mae, 'MSE': test_mse, 'RMSE': test_rmse, 'AARD%': test_aard},
         'predictions': {'y_train_pred': y_train_pred, 'y_test_pred': y_test_pred}
     }
-
-
 
 
 
@@ -292,6 +289,7 @@ for model_name, model in models.items():
 
 
 
+
 print("\n" + "="*80)
 print("Complete Parameter Summary for All Models (Optimized Parameters + Actual Default Parameters)")
 print("="*80)
@@ -340,8 +338,6 @@ else:
 
 
 
-
-
 print("\n7. Performance Summary......")
 
 if results:
@@ -377,7 +373,7 @@ if results:
     
 
     for model_name, result in results.items():
-        base_name = f"MD-{model_name} Opt. 1"
+        base_name = f"MD&GC-{model_name} Opt. 1"
         print(f"\n💾 Saved {base_name} ...")
         
 
@@ -431,8 +427,6 @@ if results:
         print(f"   ✅ Prediction results saved: {predictions_filename}")
     
     print(f"\n✅ All models and prediction results have been saved successfully")    
-
-
 
 
 
@@ -495,7 +489,7 @@ def generate_model_visualizations(model_name, model_info, y_train, y_test, save_
     
     plt.xlabel("Experimental Capacity (mol/kg)", fontsize=label_fontsize, fontname='Arial')
     plt.ylabel("Predicted Capacity (mol/kg)", fontsize=label_fontsize, fontname='Arial')
-    plt.title(f"Pred. vs Exp. Capacity (MD-{model_name} Opt. 1)", fontsize=title_fontsize, fontweight='bold', fontname='Arial')
+    plt.title(f"Pred. vs Exp. Capacity (MD&GC-{model_name} Opt. 1)", fontsize=title_fontsize, fontweight='bold', fontname='Arial')
     plt.legend(loc='upper left', prop={'family': 'Arial', 'size': legend_fontsize})
     
     plt.tick_params(axis='both', which='major', width=2, color='black')
@@ -505,7 +499,7 @@ def generate_model_visualizations(model_name, model_info, y_train, y_test, save_
     plt.grid(True, alpha=0.3, color='gray', linestyle='-', linewidth=0.5)
     plt.tight_layout()
     
-    filename1 = f"Pred vs Exp Capacity (MD-{model_name} Opt. 1).png"
+    filename1 = f"Pred vs Exp Capacity (MD&GC-{model_name} Opt. 1).png"
     full_path1 = os.path.join(save_path, filename1)
     plt.savefig(full_path1, dpi=300, bbox_inches='tight')
     plt.show()
@@ -533,7 +527,7 @@ def generate_model_visualizations(model_name, model_info, y_train, y_test, save_
     
     plt.xlabel('Predicted Capacity (mol/kg)', fontsize=label_fontsize, fontname='Arial')
     plt.ylabel('Residual (mol/kg)', fontsize=label_fontsize, fontname='Arial')
-    plt.title(f'Residual Plot (MD-{model_name} Opt. 1)', fontsize=title_fontsize, fontweight='bold', fontname='Arial')
+    plt.title(f'Residual Plot (MD&GC-{model_name} Opt. 1)', fontsize=title_fontsize, fontweight='bold', fontname='Arial')
     plt.legend(loc='lower right', prop={'family': 'Arial', 'size': legend_fontsize})
     
     plt.tick_params(axis='both', which='major', width=2, color='black')
@@ -543,7 +537,7 @@ def generate_model_visualizations(model_name, model_info, y_train, y_test, save_
     plt.grid(True, alpha=0.3, color='gray', linestyle='-', linewidth=0.5)
     plt.tight_layout()
     
-    filename2 = f"Residual Plot (MD-{model_name} Opt. 1).png"
+    filename2 = f"Residual Plot (MD&GC-{model_name} Opt. 1).png"
     full_path2 = os.path.join(save_path, filename2)
     plt.savefig(full_path2, dpi=300, bbox_inches='tight')
     plt.show()
@@ -580,7 +574,7 @@ def generate_model_visualizations(model_name, model_info, y_train, y_test, save_
     
     plt.xlabel('Residual (mol/kg)', fontsize=label_fontsize, fontname='Arial')
     plt.ylabel('Number of Data Points', fontsize=label_fontsize, fontname='Arial')
-    plt.title(f'Error Distribution (MD-{model_name} Opt. 1)', fontsize=title_fontsize, fontweight='bold', fontname='Arial')
+    plt.title(f'Error Distribution (MD&GC-{model_name} Opt. 1)', fontsize=title_fontsize, fontweight='bold', fontname='Arial')
     plt.legend(loc='upper right', prop={'family': 'Arial', 'size': legend_fontsize})
     
     plt.tick_params(axis='both', which='major', width=2, color='black')
@@ -590,14 +584,14 @@ def generate_model_visualizations(model_name, model_info, y_train, y_test, save_
     plt.grid(True, alpha=0.3, color='gray', linestyle='-', linewidth=0.5)
     plt.tight_layout()
     
-    filename4 = f"Error Distribution (MD-{model_name} Opt. 1).png"
+    filename4 = f"Error Distribution (MD&GC-{model_name} Opt. 1).png"
     full_path4 = os.path.join(save_path, filename4)
     plt.savefig(full_path4, dpi=300, bbox_inches='tight')
     plt.show()
     print(f"   📊 Saved: {filename4}")
     print(f"   📍 Path: {os.path.abspath(full_path4)}")
     
-    print(f"\n   MD-{model_name} Opt. 1 Detailed Statistics:")
+    print(f"\n   MD&GC-{model_name} Opt. 1 Detailed Statistics:")
     print(f"   Training Set R²: {model_info['train_metrics']['R2']:.4f}")
     print(f"   Test Set R²: {model_info['test_metrics']['R2']:.4f}")
     print(f"   Training Set RMSE: {model_info['train_metrics']['RMSE']:.4f} mol/kg")
@@ -615,11 +609,9 @@ if results:
     
     all_image_paths = {}
     for model_name, model_info in results.items():
-        print(f"\n📈 Generating visual charts for MD-{model_name} Opt. 1...")
+        print(f"\n📈 Generating visual charts for MD&GC-{model_name} Opt. 1...")
         image_paths = generate_model_visualizations(model_name, model_info, y_train, y_test)
         all_image_paths[model_name] = image_paths
-
-
 
 
 
@@ -646,7 +638,7 @@ def create_shap_summary_plot(model_name, shap_values, X_sample, feature_columns,
             spine.set_linewidth(border_width)
             spine.set_color('black')
         
-        plt.title(f'SHAP Summary Plot (MD-{model_name} Opt. 1)', 
+        plt.title(f'SHAP Summary Plot (MD&GC-{model_name} Opt. 1)', 
                  fontsize=title_fontsize, fontweight='bold', fontname='Arial')
         
         plt.xlabel('SHAP value (impact on model output)', 
@@ -658,7 +650,7 @@ def create_shap_summary_plot(model_name, shap_values, X_sample, feature_columns,
         
         plt.tight_layout()
         
-        filename = f"SHAP Summary Plot (MD-{model_name} Opt. 1).png"
+        filename = f"SHAP Summary Plot (MD&GC-{model_name} Opt. 1).png"
         full_path = os.path.join(save_path, filename)
         plt.savefig(full_path, dpi=300, bbox_inches='tight')
         plt.show()
@@ -690,6 +682,17 @@ def create_shap_importance_plot(model_name, shap_values, feature_columns, save_p
             'shap_importance': shap_importance
         }).sort_values('shap_importance', ascending=True)
         
+        shap_importance_df = importance_df.sort_values('shap_importance', ascending=False)
+        shap_importance_filename = f"SHAP Feature Importance (MD&GC-{model_name} Opt. 1).xlsx"
+        shap_importance_full_path = os.path.join(save_path, shap_importance_filename)
+        shap_importance_df.to_excel(shap_importance_full_path, index=False)
+        print(f"   💾 Path: {os.path.abspath(shap_importance_full_path)}")
+        
+        print(f"   {model_name} SHAP top 20 important features:")
+        for i, row in shap_importance_df.head(20).iterrows():
+            print(f"     {row['feature']}: {row['shap_importance']:.6f}")
+        
+
         top_20_features = importance_df.tail(20)
         
         plt.figure(figsize=(8, 10))
@@ -713,7 +716,7 @@ def create_shap_importance_plot(model_name, shap_values, feature_columns, save_p
             ax.text(row['shap_importance'] + 0.005, i, f'{row["shap_importance"]:.3f}', 
                    va='center', fontsize=legend_fontsize, fontname='Arial')
         
-        ax.set_title(f'SHAP Feature Importance (MD-{model_name} Opt. 1)', 
+        ax.set_title(f'SHAP Feature Importance (MD&GC-{model_name} Opt. 1)', 
                     fontsize=title_fontsize, fontweight='bold', fontname='Arial')
         
         ax.tick_params(axis='both', which='major', width=2, color='black')
@@ -724,7 +727,7 @@ def create_shap_importance_plot(model_name, shap_values, feature_columns, save_p
         ax.grid(True, alpha=0.3, axis='x', color='gray', linestyle='-', linewidth=0.5)
         plt.tight_layout()
         
-        filename = f"SHAP Feature Importance (MD-{model_name} Opt. 1).png"
+        filename = f"SHAP Feature Importance (MD&GC-{model_name} Opt. 1).png"
         full_path = os.path.join(save_path, filename)
         plt.savefig(full_path, dpi=300, bbox_inches='tight')
         plt.show()
@@ -741,7 +744,7 @@ if results:
     print("Starting SHAP analysis")
     
     for model_name, model_info in results.items():
-        print(f"\n🔬 Analyzing MD-{model_name} Opt. 1 model...")
+        print(f"\n🔬 Analyzing MD&GC-{model_name} Opt. 1 model...")
         
         try:
             import shap
@@ -772,14 +775,15 @@ if results:
             )
             
             if summary_success and importance_success:
-                print(f"   ✅ MD-{model_name} Opt. 1 SHAP analysis completed")
+                print(f"   ✅ MD&GC-{model_name} Opt. 1 SHAP analysis completed")
             else:
-                print(f"   ⚠️ MD-{model_name} Opt. 1 SHAP analysis had issues")
+                print(f"   ⚠️ MD&GC-{model_name} Opt. 1 SHAP analysis had issues")
                 
         except Exception as e:
-            print(f"   ❌ MD-{model_name} Opt. 1 SHAP analysis failed: {e}")
+            print(f"   ❌ MD&GC-{model_name} Opt. 1 SHAP analysis failed: {e}")
             import traceback
             print(f"   Detailed error: {traceback.format_exc()}")
+
 
 
 
